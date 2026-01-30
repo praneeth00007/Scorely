@@ -73,8 +73,15 @@ const Profile = () => {
                             <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">TEE Proofs Generated</div>
                         </div>
                         <div>
-                            <div className="text-2xl font-bold text-white tracking-tight">{Math.min(2000 + (history.length * 50), 3000).toLocaleString()}</div>
-                            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Reputation Score</div>
+                            <div className="text-2xl font-bold text-white tracking-tight">
+                                {(() => {
+                                    const validScores = history.filter(h => h.score && h.score > 0).map(h => h.score);
+                                    if (validScores.length === 0) return '---';
+                                    const avg = validScores.reduce((a, b) => a + b, 0) / validScores.length;
+                                    return Math.round(avg).toLocaleString();
+                                })()}
+                            </div>
+                            <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Reputation Score (Avg)</div>
                         </div>
                         <div>
                             <div className="text-2xl font-bold text-white tracking-tight">{history.length}</div>
