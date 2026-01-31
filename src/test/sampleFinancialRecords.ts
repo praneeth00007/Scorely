@@ -8,7 +8,7 @@ export interface FinancialRecord {
 }
 
 /**
- * Sample financial records for testing the Scora Confidential Credit Scoring
+ * Sample financial records for testing the Scorely Credit Scoring
  */
 export const SAMPLE_FINANCIAL_RECORDS: FinancialRecord[] = [
   {

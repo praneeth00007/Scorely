@@ -19,7 +19,7 @@ const web3Onboard = init({
     wallets: [injected],
     chains: [bellecour],
     appMetadata: {
-        name: 'Scora',
+        name: 'Scorely',
         icon: '<svg>...</svg>', // Add your app icon here
         description: 'Privacy-preserving confidential computing on iExec',
         recommendedInjectedWallets: [

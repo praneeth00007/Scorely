@@ -27,6 +27,10 @@ export default defineConfig({
       'vm': path.resolve(__dirname, 'src/shims/vm-shim.js'),
     }
   },
+  define: {
+    'process.env': {},
+    'module': {},
+  },
   optimizeDeps: {
     include: [
       'buffer',

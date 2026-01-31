@@ -19,7 +19,7 @@ export const Header = ({ login, isConnected }: { login: () => void; isConnected:
                         <span className="font-display font-black text-[var(--background)] text-2xl -tracking-widest">SC</span>
                     </div>
                     <div className="hidden sm:flex flex-col leading-none">
-                        <span className="font-display font-black text-3xl tracking-tighter text-[var(--text-main)] uppercase italic">SCORA</span>
+                        <span className="font-display font-black text-3xl tracking-tighter text-[var(--text-main)] uppercase italic">SCORELY</span>
                         <span className="text-[10px] font-black text-[var(--text-muted)] tracking-[0.4em] uppercase mt-1">Confidential</span>
                     </div>
                 </Link>

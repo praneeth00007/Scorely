@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- SEO Meta Tags -->
-    <title>SCORA | Confidential Credit Scoring</title>
+    <title>SCORELY | Credit Scoring</title>
     <meta
       name="description"
-      content="Confidential Credit Scoring powered by iExec TEE. Securely assess creditworthiness without exposing raw financial data."
+      content="Credit scoring powered by iExec TEE. Securely assess creditworthiness without exposing raw financial data."
     />
     <meta
       name="keywords"
@@ -16,7 +16,7 @@
     />
 
     <!-- Open Graph -->
-    <meta property="og:title" content="SCORA | Confidential Credit Terminal" />
+    <meta property="og:title" content="SCORELY | Credit Terminal" />
     <meta
       property="og:description"
       content="Confidential Credit Scoring powered by iExec TEE."
@@ -27,6 +27,11 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   </head>
   <body>
+    <script>
+      window.global = window;
+      window.module = { exports: {} };
+      window.process = { env: {} };
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

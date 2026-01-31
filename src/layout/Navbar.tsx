@@ -21,8 +21,8 @@ const Navbar = () => {
                     <span className="font-display font-black text-[var(--background)] text-lg md:text-xl -tracking-widest">SC</span>
                 </div>
                 <div className="flex flex-col leading-none hidden md:flex">
-                    <span className="font-display font-black text-2xl tracking-tighter uppercase italic text-[var(--text-main)]">SCORA</span>
-                    <span className="text-[10px] font-black text-[var(--text-muted)] tracking-[0.3em] uppercase mt-1 italic">Protocol</span>
+                    <span className="font-display font-black text-2xl tracking-tighter uppercase italic text-[var(--text-main)]">SCORELY</span>
+                    <span className="text-[10px] font-black text-[var(--text-muted)] tracking-[0.3em] uppercase mt-1 italic">Labs</span>
                 </div>
             </Link>
 

@@ -63,7 +63,7 @@ const ExecutionPage = () => {
     // --- Persistence & Resume Logic ---
     const saveState = (updates: any) => {
         if (!runId) return;
-        const key = `scora_execution_${runId}`;
+        const key = `scorely_execution_${runId}`;
         const current = JSON.parse(localStorage.getItem(key) || '{}');
         const newState = { ...current, ...updates };
         localStorage.setItem(key, JSON.stringify(newState));
@@ -71,13 +71,13 @@ const ExecutionPage = () => {
 
     const getSavedState = () => {
         if (!runId) return {};
-        return JSON.parse(localStorage.getItem(`scora_execution_${runId}`) || '{}');
+        return JSON.parse(localStorage.getItem(`scorely_execution_${runId}`) || '{}');
     };
 
     const handleDownload = () => {
         if (score === null || !runId) return;
         const report = `
-SCORA CREDIT REPORT
+SCORELY CREDIT REPORT
 -------------------
 Run ID:    ${runId}
 Date:      ${new Date().toLocaleString()}
@@ -143,7 +143,7 @@ Task ID: ${timeline[3].explorerLink?.split('/').pop() || 'N/A'}
 
         // 1. Recover Input Data
         if (!formData && runId) {
-            const stored = localStorage.getItem(`scora_run_${runId}`);
+            const stored = localStorage.getItem(`scorely_run_${runId}`);
             if (stored) {
                 try {
                     formData = JSON.parse(stored);
@@ -230,7 +230,7 @@ Task ID: ${timeline[3].explorerLink?.split('/').pop() || 'N/A'}
             saveState({ completed: true, score: result.score, grade: result.grade });
 
             // Save to History (De-dupe logic or overwrite)
-            const existingHistory = JSON.parse(localStorage.getItem('scora_history') || '[]');
+            const existingHistory = JSON.parse(localStorage.getItem('scorely_history') || '[]');
             // Check if already exists
             if (!existingHistory.find((h: any) => h.taskId === taskId)) {
                 const newRecord = {
