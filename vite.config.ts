@@ -28,7 +28,6 @@ export default defineConfig({
     }
   },
   define: {
-    'module': '({})',
   },
   optimizeDeps: {
     include: [
