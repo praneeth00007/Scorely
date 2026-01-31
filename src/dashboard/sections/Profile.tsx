@@ -8,7 +8,7 @@ const Profile = () => {
     const [latestScore, setLatestScore] = React.useState<number | null>(null);
 
     React.useEffect(() => {
-        const stored = localStorage.getItem('scorely_history');
+        const stored = localStorage.getItem('reputation_history');
         if (stored) {
             try {
                 const parsed = JSON.parse(stored);

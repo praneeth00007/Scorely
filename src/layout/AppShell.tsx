@@ -7,14 +7,14 @@ const AppShell = () => {
     const [runTour, setRunTour] = useState(false);
 
     useEffect(() => {
-        const tourCompleted = localStorage.getItem('scorely_tour_completed');
+        const tourCompleted = localStorage.getItem('tour_done');
         if (!tourCompleted) {
             setRunTour(true);
         }
     }, []);
 
     const handleTourFinish = () => {
-        localStorage.setItem('scorely_tour_completed', 'true');
+        localStorage.setItem('tour_done', 'true');
         setRunTour(false);
     };
 

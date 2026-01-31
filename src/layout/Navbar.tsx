@@ -16,13 +16,9 @@ const Navbar = () => {
         <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-[var(--border)] flex flex-col bg-[var(--surface)] z-20 transition-colors fixed md:sticky top-0 h-[64px] md:h-screen">
 
             {/* Header Logo */}
-            <Link to="/" className="p-4 md:p-8 border-b border-[var(--border)] flex items-center gap-4 hover:bg-[var(--surface-highlight)] transition-colors">
-                <div className="w-8 h-8 md:w-10 md:h-10 bg-[var(--text-main)] rounded-xl flex items-center justify-center shadow-lg">
-                    <span className="font-display font-black text-[var(--background)] text-lg md:text-xl -tracking-widest">SC</span>
-                </div>
-                <div className="flex flex-col leading-none hidden md:flex">
-                    <span className="font-display font-black text-2xl tracking-tighter uppercase italic text-[var(--text-main)]">SCORELY</span>
-                    <span className="text-[10px] font-black text-[var(--text-muted)] tracking-[0.3em] uppercase mt-1 italic">Labs</span>
+            <Link to="/" className="p-4 md:p-8 border-b border-[var(--border)] flex items-center justify-center hover:bg-[var(--surface-highlight)] transition-colors">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-[var(--text-main)] rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden group-hover:scale-105 transition-transform">
+                    <img src="/favicon.png" alt="Logo" className="w-full h-full object-cover p-2" />
                 </div>
             </Link>
 

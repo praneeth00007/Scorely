@@ -63,7 +63,7 @@ const ExecutionPage = () => {
     // --- Persistence & Resume Logic ---
     const saveState = (updates: any) => {
         if (!runId) return;
-        const key = `scorely_execution_${runId}`;
+        const key = `session_exec_${runId}`;
         const current = JSON.parse(localStorage.getItem(key) || '{}');
         const newState = { ...current, ...updates };
         localStorage.setItem(key, JSON.stringify(newState));
@@ -71,13 +71,13 @@ const ExecutionPage = () => {
 
     const getSavedState = () => {
         if (!runId) return {};
-        return JSON.parse(localStorage.getItem(`scorely_execution_${runId}`) || '{}');
+        return JSON.parse(localStorage.getItem(`session_exec_${runId}`) || '{}');
     };
 
     const handleDownload = () => {
         if (score === null || !runId) return;
         const report = `
-SCORELY CREDIT REPORT
+SCORE REPORT
 -------------------
 Run ID:    ${runId}
 Date:      ${new Date().toLocaleString()}
@@ -143,7 +143,7 @@ Task ID: ${timeline[3].explorerLink?.split('/').pop() || 'N/A'}
 
         // 1. Recover Input Data
         if (!formData && runId) {
-            const stored = localStorage.getItem(`scorely_run_${runId}`);
+            const stored = localStorage.getItem(`session_run_${runId}`);
             if (stored) {
                 try {
                     formData = JSON.parse(stored);
@@ -230,7 +230,7 @@ Task ID: ${timeline[3].explorerLink?.split('/').pop() || 'N/A'}
             saveState({ completed: true, score: result.score, grade: result.grade });
 
             // Save to History (De-dupe logic or overwrite)
-            const existingHistory = JSON.parse(localStorage.getItem('scorely_history') || '[]');
+            const existingHistory = JSON.parse(localStorage.getItem('reputation_history') || '[]');
             if (!existingHistory.find((h: any) => h.taskId === taskId)) {
                 const newRecord = {
                     id: crypto.randomUUID().slice(0, 8),
@@ -240,7 +240,7 @@ Task ID: ${timeline[3].explorerLink?.split('/').pop() || 'N/A'}
                     score: result.score,
                     grade: result.grade
                 };
-                localStorage.setItem('scorely_history', JSON.stringify([newRecord, ...existingHistory]));
+                localStorage.setItem('reputation_history', JSON.stringify([newRecord, ...existingHistory]));
             }
         } catch (err: any) {
             console.error("Execution Failed:", err);
@@ -352,11 +352,16 @@ Task ID: ${timeline[3].explorerLink?.split('/').pop() || 'N/A'}
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-end mt-4">
                             {status === 'completed' && score !== null ? (
-                                score === 0 ? (
-                                    <span className="text-xl font-bold text-slate-400 uppercase tracking-widest text-center">Not Eligible</span>
-                                ) : (
-                                    <span className="text-6xl font-bold text-white tracking-tighter leading-none">{score}</span>
-                                )
+                                <>
+                                    <div className="w-12 h-12 mb-4 animate-in fade-in zoom-in duration-1000">
+                                        <img src="/favicon.png" alt="Logo" className="w-full h-full object-contain opacity-50" />
+                                    </div>
+                                    {score === 0 ? (
+                                        <span className="text-xl font-bold text-slate-400 uppercase tracking-widest text-center">Not Eligible</span>
+                                    ) : (
+                                        <span className="text-6xl font-bold text-white tracking-tighter leading-none">{score}</span>
+                                    )}
+                                </>
                             ) : status === 'failed' ? (
                                 <span className="text-red-500 text-sm font-bold font-mono">ERROR</span>
                             ) : (

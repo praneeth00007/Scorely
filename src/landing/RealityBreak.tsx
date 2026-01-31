@@ -25,7 +25,7 @@ export const RealityBreak = ({ login }: { login: () => void }) => (
         onClick={login}
         className="px-16 py-7 bg-[var(--text-main)] text-[var(--background)] font-display font-black uppercase text-xl tracking-[0.2em] italic hover:bg-[var(--accent)] hover:text-white transition-all duration-500 shadow-2xl"
       >
-        Initialize Scorely
+        Initialize Engine
       </motion.button>
     </div>
   </section>

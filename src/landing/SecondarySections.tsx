@@ -38,7 +38,7 @@ export const Features = () => (
                     </h2>
                 </div>
                 <p className="text-[var(--text-muted)] max-w-sm font-mono text-sm leading-relaxed">
-                    The Scorely protocol combines decentralized trust with hardware-level security.
+                    The protocol combines decentralized trust with hardware-level security.
                 </p>
             </div>
 
@@ -83,7 +83,7 @@ export const Features = () => (
 
 export const Testimonials = () => {
     const reviews = [
-        { text: "Scorely finally lets me use my bank data on-chain without exposing it.", author: "Alex D.", role: "DeFi User" },
+        { text: "This engine finally lets me use my bank data on-chain without exposing it.", author: "Alex D.", role: "DeFi User" },
         { text: "The TEE verification is a game changer for under-collateralized loans.", author: "Sarah K.", role: "Lending Protocol" },
         { text: "Smooth, fast, and completely private. The future of credit scoring.", author: "James M.", role: "Crypto Native" },
         { text: "I love that I own my data. No more black box scoring models.", author: "Elena R.", role: "Privacy Advocate" }
@@ -124,15 +124,14 @@ export const Footer = () => (
     <footer className="py-20 px-6 border-t border-[var(--border)] bg-[var(--background)]">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
             <div className="flex items-center gap-4">
-                <div className="w-8 h-8 bg-[var(--surface)] rounded-lg flex items-center justify-center border border-[var(--border)]">
-                    <span className="font-display font-black text-[var(--text-main)] text-sm italic">SC</span>
+                <div className="w-12 h-12 bg-[var(--surface)] rounded-xl flex items-center justify-center border border-[var(--border)] overflow-hidden shadow-xl">
+                    <img src="/favicon.png" alt="Logo" className="w-full h-full object-cover p-2" />
                 </div>
-                <span className="font-display font-black text-[var(--text-main)] uppercase tracking-tighter text-xl italic">SCORELY</span>
             </div>
 
             <div className="flex flex-col items-center md:items-end gap-3">
                 <span className="font-bold text-[10px] text-[var(--text-muted)] tracking-[0.5em] uppercase">Designed for Privacy // Built on iExec</span>
-                <span className="font-bold text-xs text-[var(--text-muted)] uppercase tracking-widest">© 2026 Scorely Labs</span>
+                <span className="font-bold text-xs text-[var(--text-muted)] uppercase tracking-widest">© 2026 Labs</span>
             </div>
         </div>
     </footer>

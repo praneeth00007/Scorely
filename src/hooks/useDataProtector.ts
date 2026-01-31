@@ -5,8 +5,8 @@ import { BrowserProvider, JsonRpcSigner } from "ethers";
 import JSZip from "jszip";
 import { IExec } from "iexec";
 
-// iExec app address for Scorely Credit Scoring
-const SCORELY_APP_ADDRESS = "0x5c52b4E664557C3e2353EBEd240A81a8A7ABEaF2";
+// iExec app address for the computation engine Credit Scoring
+const RESOURCE_APP_ADDRESS = "0x5c52b4E664557C3e2353EBEd240A81a8A7ABEaF2";
 const WORKERPOOL_ADDRESS = "0x0975bfce90f4748dab6d6729c96b33a2cd5491f5";
 const MAX_PRICE = 100000000;
 
@@ -69,7 +69,7 @@ export function useDataProtector() {
       }
 
       try {
-        console.log("[DataProtector] Initializing for Scorely...");
+        console.log("[DataProtector] Initializing for the computation engine...");
 
         const { IExecDataProtectorCore } = await import("@iexec/dataprotector");
 
@@ -78,7 +78,7 @@ export function useDataProtector() {
         setDataProtectorCore(dpCore);
 
         setIsInitialized(true);
-        console.log("[DataProtector] Scorely Core Initialized");
+        console.log("[DataProtector] the computation engine Core Initialized");
       } catch (error) {
         console.error("[DataProtector] Initialization failed:", error);
         setIsInitialized(false);
@@ -90,39 +90,39 @@ export function useDataProtector() {
 
   const protectData = useCallback(async (data: DetailedFinancialData): Promise<string> => {
     if (!dataProtectorCore) throw new Error("DataProtector not initialized");
-    console.log('[Scorely] Protecting Data...');
+    console.log('[Engine] Protecting Data...');
     const protectedData = await dataProtectorCore.protectData({
-      name: `Scorely_Credit_Data_${Date.now()}`,
+      name: `the computation engine_Credit_Data_${Date.now()}`,
       data: {
         content: JSON.stringify(data),
       },
     });
-    console.log(`[Scorely] Protected Data Address: ${protectedData.address}`);
+    console.log(`[Engine] Protected Data Address: ${protectedData.address}`);
     return protectedData.address;
   }, [dataProtectorCore]);
 
   const grantAccess = useCallback(async (protectedDataAddress: string): Promise<string> => {
     if (!dataProtectorCore) throw new Error("DataProtector not initialized");
     if (!address) throw new Error("No wallet connected");
-    console.log('[Scorely] Granting Access...');
+    console.log('[Engine] Granting Access...');
     const result = await dataProtectorCore.grantAccess({
       protectedData: protectedDataAddress,
-      authorizedApp: SCORELY_APP_ADDRESS,
+      authorizedApp: RESOURCE_APP_ADDRESS,
       authorizedUser: address,
       pricePerAccess: 0,
       numberOfAccess: 1,
     });
-    console.log('[Scorely] Grant Access Result:', result);
+    console.log('[Engine] Grant Access Result:', result);
     return (result as any).txHash || (result as any).sign || "granted";
   }, [dataProtectorCore, address]);
 
   const processData = useCallback(async (protectedDataAddress: string): Promise<{ taskId: string, dealId: string }> => {
     if (!dataProtectorCore) throw new Error("DataProtector not initialized");
-    console.log('[Scorely] Computing (Direct Match)...');
+    console.log('[Engine] Computing (Direct Match)...');
 
     const result = await dataProtectorCore.processProtectedData({
       protectedData: protectedDataAddress,
-      app: SCORELY_APP_ADDRESS,
+      app: RESOURCE_APP_ADDRESS,
       workerpool: WORKERPOOL_ADDRESS,
       workerpoolMaxPrice: MAX_PRICE,
       appMaxPrice: MAX_PRICE,
@@ -131,25 +131,25 @@ export function useDataProtector() {
         console.log(`[TEE] ${status.title}`);
       }
     });
-    console.log('[Scorely] Process Data Result:', result);
+    console.log('[Engine] Process Data Result:', result);
     return { taskId: result.taskId, dealId: result.dealId };
   }, [dataProtectorCore]);
 
   const fetchResult = useCallback(async (taskId: string): Promise<CreditScoreResult> => {
-    console.log('[Scorely] Fetching Result for task:', taskId);
+    console.log('[Engine] Fetching Result for task:', taskId);
 
     const iexec = new IExec({ ethProvider: (window as any).ethereum });
 
-    console.log('[Scorely] Downloading result zip for task:', taskId);
+    console.log('[Engine] Downloading result zip for task:', taskId);
     const resultFile = await iexec.task.fetchResults(taskId);
     const blob = await resultFile.blob();
 
-    console.log('[Scorely] Unzipping result...');
+    console.log('[Engine] Unzipping result...');
     const zip = await JSZip.loadAsync(blob);
 
     const errorJson = await zip.file('error.json')?.async('string');
     if (errorJson) {
-      console.error('[Scorely] TEE execution failed:', errorJson);
+      console.error('[Engine] TEE execution failed:', errorJson);
       const errorData = JSON.parse(errorJson);
       throw new Error(errorData.message || 'TEE execution failed');
     }
@@ -159,7 +159,7 @@ export function useDataProtector() {
       throw new Error("Neither result.json nor error.json found in enclave output");
     }
 
-    console.log('[Scorely] Result extracted:', resultJson);
+    console.log('[Engine] Result extracted:', resultJson);
     const parsedData = JSON.parse(resultJson);
 
     const factors = parsedData.factorBreakdown ? Object.entries(parsedData.factorBreakdown).map(([key, value]) => ({
@@ -175,7 +175,7 @@ export function useDataProtector() {
       taskId: taskId
     };
 
-    console.log('[Scorely] Final score result:', scoreResult);
+    console.log('[Engine] Final score result:', scoreResult);
     return scoreResult;
   }, []);
 

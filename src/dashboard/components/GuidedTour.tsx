@@ -57,7 +57,7 @@ const CustomTooltip = ({
         {isSkipping ? (
           <div className="flex flex-col items-center justify-center flex-1 animate-fade-in text-center h-full">
             <h3 className="font-display font-black text-2xl text-[var(--accent)] mb-2 uppercase italic">Success!</h3>
-            <p className="text-zinc-400 text-sm">Thank you for exploring Scorely.</p>
+            <p className="text-zinc-400 text-sm">Thank you for exploring the environment.</p>
           </div>
         ) : (
           <div className="flex flex-col h-full">
@@ -102,7 +102,7 @@ const CustomTooltip = ({
           <div className="absolute inset-0 bg-blue-500/10 blur-3xl rounded-full" />
           <img
             src={Mascot}
-            alt="Scorely Mascot"
+            alt="Mascot"
             className="relative w-full h-full object-contain drop-shadow-2xl grayscale-[0.2]"
             style={{ transform: 'scale(1.2)' }}
           />
@@ -117,11 +117,11 @@ const GuidedTour: React.FC<Props> = ({ run, steps: customSteps, onFinish }) => {
     {
       target: 'body',
       placement: 'center',
-      title: 'Scorely Terminal Initialized',
+      title: 'Terminal Initialized',
       content: (
         <div className="flex flex-col gap-3">
           <p className="text-base text-zinc-200 font-medium">
-            Welcome to the <span className="text-white font-bold">Scorely Labs</span>.
+            Welcome to the <span className="text-white font-bold">computation environment</span>.
           </p>
           <p className="text-sm text-zinc-400 leading-relaxed">
             This environment is protected by <span className="text-blue-400 font-mono text-xs border border-blue-400/20 px-1 rounded bg-blue-400/5">hardware-level TEE encryption</span> for your security.

@@ -55,7 +55,7 @@ const CreditScoreTEE = () => {
 
   // --- Load History on Mount ---
   useEffect(() => {
-    const storedHistory = localStorage.getItem('scorely_history');
+    const storedHistory = localStorage.getItem('reputation_history');
     if (storedHistory) {
       try {
         setHistory(JSON.parse(storedHistory));
@@ -96,7 +96,7 @@ const CreditScoreTEE = () => {
 
     // Persist data for recovery on refresh
     try {
-      localStorage.setItem(`scorely_run_${runId}`, JSON.stringify(formData));
+      localStorage.setItem(`session_run_${runId}`, JSON.stringify(formData));
     } catch (e) {
       console.error("Failed to persist run data", e);
     }

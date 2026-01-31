@@ -1,5 +1,5 @@
 import { useConnectWallet, useSetChain } from '@web3-onboard/react';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 
 export function useAccount() {
     const [{ wallet, connecting }] = useConnectWallet();
@@ -24,7 +24,7 @@ export function useDisconnect() {
         disconnect: async () => {
             if (wallet) {
                 // Clear persistence
-                localStorage.removeItem('scorely_wallet_label');
+                localStorage.removeItem('cached_wallet_label');
                 await disconnect(wallet);
             }
         },
@@ -43,7 +43,7 @@ export function useSessionRestore() {
 
     // 1. Auto-connect on mount if previously connected
     useEffect(() => {
-        const label = localStorage.getItem('scorely_wallet_label');
+        const label = localStorage.getItem('cached_wallet_label');
 
         if (label && !wallet) {
             console.log("Attempting to restore session for:", label);
@@ -61,7 +61,7 @@ export function useSessionRestore() {
                 })
                 .catch(err => {
                     console.error("Session restore failed:", err);
-                    localStorage.removeItem('scorely_wallet_label');
+                    localStorage.removeItem('cached_wallet_label');
                 })
                 .finally(() => {
                     // Slight delay to ensure state updates propagate
@@ -76,7 +76,7 @@ export function useSessionRestore() {
     // 2. Save label when connected
     useEffect(() => {
         if (wallet?.label) {
-            localStorage.setItem('scorely_wallet_label', wallet.label);
+            localStorage.setItem('cached_wallet_label', wallet.label);
         }
     }, [wallet]);
 

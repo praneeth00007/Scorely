@@ -14,13 +14,9 @@ export const Header = ({ login, isConnected }: { login: () => void; isConnected:
             className="fixed top-8 left-0 right-0 z-[200] px-6 pointer-events-none"
         >
             <div className="max-w-7xl mx-auto flex justify-between items-center bg-[var(--surface)] backdrop-blur-2xl border border-[var(--border)] rounded-3xl p-4 shadow-2xl pointer-events-auto">
-                <Link to="/" className="flex items-center gap-4 pl-4 pointer-events-auto">
-                    <div className="w-12 h-12 bg-[var(--text-main)] rounded-xl flex items-center justify-center shadow-lg">
-                        <span className="font-display font-black text-[var(--background)] text-2xl -tracking-widest">SC</span>
-                    </div>
-                    <div className="hidden sm:flex flex-col leading-none">
-                        <span className="font-display font-black text-3xl tracking-tighter text-[var(--text-main)] uppercase italic">SCORELY</span>
-                        <span className="text-[10px] font-black text-[var(--text-muted)] tracking-[0.4em] uppercase mt-1">Confidential</span>
+                <Link to="/" className="flex items-center gap-1 pl-4 pointer-events-auto">
+                    <div className="w-14 h-14 bg-[var(--text-main)] rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden hover:scale-105 transition-transform">
+                        <img src="/favicon.png" alt="Logo" className="w-full h-full object-cover p-2" />
                     </div>
                 </Link>
 
