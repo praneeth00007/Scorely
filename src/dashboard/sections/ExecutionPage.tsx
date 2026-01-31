@@ -231,7 +231,6 @@ Task ID: ${timeline[3].explorerLink?.split('/').pop() || 'N/A'}
 
             // Save to History (De-dupe logic or overwrite)
             const existingHistory = JSON.parse(localStorage.getItem('scorely_history') || '[]');
-            // Check if already exists
             if (!existingHistory.find((h: any) => h.taskId === taskId)) {
                 const newRecord = {
                     id: crypto.randomUUID().slice(0, 8),
@@ -241,9 +240,8 @@ Task ID: ${timeline[3].explorerLink?.split('/').pop() || 'N/A'}
                     score: result.score,
                     grade: result.grade
                 };
-                localStorage.setItem('scora_history', JSON.stringify([newRecord, ...existingHistory]));
+                localStorage.setItem('scorely_history', JSON.stringify([newRecord, ...existingHistory]));
             }
-
         } catch (err: any) {
             console.error("Execution Failed:", err);
             setStatus('failed');

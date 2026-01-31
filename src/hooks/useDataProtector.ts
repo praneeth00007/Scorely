@@ -5,8 +5,8 @@ import { BrowserProvider, JsonRpcSigner } from "ethers";
 import JSZip from "jszip";
 import { IExec } from "iexec";
 
-// iExec app address for Scora Confidential Credit Scoring
-const SCORA_APP_ADDRESS = "0x5c52b4E664557C3e2353EBEd240A81a8A7ABEaF2";
+// iExec app address for Scorely Credit Scoring
+const SCORELY_APP_ADDRESS = "0x5c52b4E664557C3e2353EBEd240A81a8A7ABEaF2";
 const WORKERPOOL_ADDRESS = "0x0975bfce90f4748dab6d6729c96b33a2cd5491f5";
 const MAX_PRICE = 100000000;
 
@@ -69,7 +69,7 @@ export function useDataProtector() {
       }
 
       try {
-        console.log("[DataProtector] Initializing for Scora...");
+        console.log("[DataProtector] Initializing for Scorely...");
 
         const { IExecDataProtectorCore } = await import("@iexec/dataprotector");
 
@@ -78,7 +78,7 @@ export function useDataProtector() {
         setDataProtectorCore(dpCore);
 
         setIsInitialized(true);
-        console.log("[DataProtector] Scora Core Initialized");
+        console.log("[DataProtector] Scorely Core Initialized");
       } catch (error) {
         console.error("[DataProtector] Initialization failed:", error);
         setIsInitialized(false);
@@ -90,41 +90,39 @@ export function useDataProtector() {
 
   const protectData = useCallback(async (data: DetailedFinancialData): Promise<string> => {
     if (!dataProtectorCore) throw new Error("DataProtector not initialized");
-    console.log('[Scora] Protecting Data...');
+    console.log('[Scorely] Protecting Data...');
     const protectedData = await dataProtectorCore.protectData({
-      name: `Scora_Credit_Data_${Date.now()}`,
+      name: `Scorely_Credit_Data_${Date.now()}`,
       data: {
         content: JSON.stringify(data),
       },
     });
-    console.log(`[Scora] Protected Data Address: ${protectedData.address}`);
+    console.log(`[Scorely] Protected Data Address: ${protectedData.address}`);
     return protectedData.address;
   }, [dataProtectorCore]);
 
   const grantAccess = useCallback(async (protectedDataAddress: string): Promise<string> => {
     if (!dataProtectorCore) throw new Error("DataProtector not initialized");
     if (!address) throw new Error("No wallet connected");
-    console.log('[Scora] Granting Access...');
+    console.log('[Scorely] Granting Access...');
     const result = await dataProtectorCore.grantAccess({
       protectedData: protectedDataAddress,
-      authorizedApp: SCORA_APP_ADDRESS,
+      authorizedApp: SCORELY_APP_ADDRESS,
       authorizedUser: address,
       pricePerAccess: 0,
       numberOfAccess: 1,
     });
-    console.log('[Scora] Grant Access Result:', result);
+    console.log('[Scorely] Grant Access Result:', result);
     return (result as any).txHash || (result as any).sign || "granted";
   }, [dataProtectorCore, address]);
 
   const processData = useCallback(async (protectedDataAddress: string): Promise<{ taskId: string, dealId: string }> => {
     if (!dataProtectorCore) throw new Error("DataProtector not initialized");
-    console.log('[Scora] Computing (Direct Match)...');
+    console.log('[Scorely] Computing (Direct Match)...');
 
-    // Some versions of the SDK might expect slightly different params
-    // but this matches the previous implementation's intent.
     const result = await dataProtectorCore.processProtectedData({
       protectedData: protectedDataAddress,
-      app: SCORA_APP_ADDRESS,
+      app: SCORELY_APP_ADDRESS,
       workerpool: WORKERPOOL_ADDRESS,
       workerpoolMaxPrice: MAX_PRICE,
       appMaxPrice: MAX_PRICE,
@@ -133,42 +131,37 @@ export function useDataProtector() {
         console.log(`[TEE] ${status.title}`);
       }
     });
-    console.log('[Scora] Process Data Result:', result);
+    console.log('[Scorely] Process Data Result:', result);
     return { taskId: result.taskId, dealId: result.dealId };
   }, [dataProtectorCore]);
 
   const fetchResult = useCallback(async (taskId: string): Promise<CreditScoreResult> => {
-    console.log('[Scora] Fetching Result for task:', taskId);
+    console.log('[Scorely] Fetching Result for task:', taskId);
 
-    // IExec needs a provider but for Bellecour it's usually auto-configured
-    // if using window.ethereum.
     const iexec = new IExec({ ethProvider: (window as any).ethereum });
 
-    console.log('[Scora] Downloading result zip for task:', taskId);
+    console.log('[Scorely] Downloading result zip for task:', taskId);
     const resultFile = await iexec.task.fetchResults(taskId);
     const blob = await resultFile.blob();
 
-    console.log('[Scora] Unzipping result...');
+    console.log('[Scorely] Unzipping result...');
     const zip = await JSZip.loadAsync(blob);
 
-    // Check for error.json first
     const errorJson = await zip.file('error.json')?.async('string');
     if (errorJson) {
-      console.error('[Scora] TEE execution failed:', errorJson);
+      console.error('[Scorely] TEE execution failed:', errorJson);
       const errorData = JSON.parse(errorJson);
       throw new Error(errorData.message || 'TEE execution failed');
     }
 
-    // Extract and parse result.json
     const resultJson = await zip.file('result.json')?.async('string');
     if (!resultJson) {
       throw new Error("Neither result.json nor error.json found in enclave output");
     }
 
-    console.log('[Scora] Result extracted:', resultJson);
+    console.log('[Scorely] Result extracted:', resultJson);
     const parsedData = JSON.parse(resultJson);
 
-    // Convert factorBreakdown object to factors array
     const factors = parsedData.factorBreakdown ? Object.entries(parsedData.factorBreakdown).map(([key, value]) => ({
       name: key.replace(/([A-Z])/g, ' $1').trim().replace(/^./, str => str.toUpperCase()),
       value: value as number
@@ -182,7 +175,7 @@ export function useDataProtector() {
       taskId: taskId
     };
 
-    console.log('[Scora] Final score result:', scoreResult);
+    console.log('[Scorely] Final score result:', scoreResult);
     return scoreResult;
   }, []);
 

@@ -9,7 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [
     nodePolyfills({
-      include: ['buffer', 'process', 'util', 'stream', 'string_decoder', 'events', 'path', 'crypto'],
+      include: ['buffer', 'process', 'util', 'stream', 'string_decoder', 'events', 'path', 'crypto', 'assert'],
       globals: {
         Buffer: true,
         global: true,
@@ -28,8 +28,7 @@ export default defineConfig({
     }
   },
   define: {
-    'process.env': {},
-    'module': {},
+    'module': '({})',
   },
   optimizeDeps: {
     include: [
@@ -38,10 +37,17 @@ export default defineConfig({
       'string_decoder',
       'util',
       'stream-browserify',
+      'events',
+      'assert',
+      'joi',
+      '@web3-onboard/core',
+      '@web3-onboard/react',
+      '@web3-onboard/injected-wallets',
     ],
     esbuildOptions: {
       define: {
         global: 'globalThis',
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
       },
     },
   },
