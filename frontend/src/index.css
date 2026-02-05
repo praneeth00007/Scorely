@@ -1,0 +1,75 @@
+/* stylelint-disable at-rule-no-unknown */
+@import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap");
+
+@layer base {
+  :root {
+    --background: #0c0c0e;
+    --surface: #1a1b1f;
+    --surface-highlight: #27262c;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --border: #3b3d51;
+    --accent: #8b5cf6;
+    --accent-dark: #27262C;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--text-main);
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02";
+    font-size: 16px;
+    line-height: 1.6;
+    font-family: Inter, sans-serif;
+    transition: colors 300ms;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer theme {
+  :root {
+    --font-sans: Inter, sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+}
+
+/* Wallet Modal Specific Styles */
+.wallet-modal-gradient {
+  background: linear-gradient(135deg, #1a1d2e 0%, #0f111a 100%);
+}
+
+.ambient-glow {
+  filter: drop-shadow(0 0 40px rgba(6, 182, 212, 0.3));
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}

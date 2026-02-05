@@ -1,0 +1,8 @@
+{
+  "defaultChain": "arbitrum-sepolia-testnet",
+  "projectName": "SCORELY",
+  "template": "Python3.13",
+  "dockerhubUsername": "",
+  "dockerhubAccessToken": "",
+  "appSecret": null
+}

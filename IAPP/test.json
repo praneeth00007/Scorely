@@ -1,0 +1,33 @@
+{
+  "income": {
+    "annualSalaryUSD": 120000,
+    "otherIncomeUSD": 5000,
+    "employmentStabilityMonths": 36
+  },
+  "liabilities": {
+    "totalOutstandingDebtUSD": 15000,
+    "monthlyDebtPaymentUSD": 2000
+  },
+  "creditUtilization": {
+    "totalCreditLimitUSD": 50000,
+    "currentUtilizedUSD": 15000
+  },
+  "creditHistory": {
+    "oldestAccountMonths": 130,
+    "averageAccountAgeMonths": 60,
+    "latePayments": {
+      "30D": 0,
+      "60D": 0,
+      "90D": 0
+    }
+  },
+  "creditMix": {
+    "creditCards": 3,
+    "installmentLoans": 1,
+    "mortgage": 1
+  },
+  "newCredit": {
+    "hardInquiriesLast12Months": 1,
+    "newAccountsLast12Months": 0
+  }
+}

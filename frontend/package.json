@@ -1,0 +1,49 @@
+{
+  "name": "scorely",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@iexec/dataprotector": "^2.0.0-beta.23",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@vercel/analytics": "^1.6.1",
+    "@vercel/speed-insights": "^1.3.1",
+    "@web3-onboard/core": "^2.24.1",
+    "@web3-onboard/injected-wallets": "^2.11.3",
+    "@web3-onboard/react": "^2.11.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.3.0",
+    "ethers": "^6.9.0",
+    "framer-motion": "^12.23.26",
+    "iexec": "^8.22.4",
+    "jszip": "^3.10.1",
+    "lucide-react": "^0.562.0",
+    "motion": "^12.30.0",
+    "next-themes": "^0.4.6",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-joyride": "^2.9.3",
+    "react-router-dom": "^7.13.0",
+    "stream-browserify": "^3.0.0",
+    "string_decoder-browserify": "^0.0.1-security",
+    "util": "^0.12.5",
+    "vite-plugin-node-polyfills": "^0.25.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.3.0",
+    "vite": "^7.3.0"
+  }
+}

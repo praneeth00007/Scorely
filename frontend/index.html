@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO Meta Tags -->
+  <title>Scorely | Credit Scoring</title>
+  <meta name="description"
+    content="Credit scoring powered by iExec TEE. Securely assess creditworthiness without exposing raw financial data." />
+  <meta name="keywords" content="iExec, TEE, Credit Scoring, Financial Privacy, Confidential Compute, Intel SGX, RWA" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Scorely - Credit Scoring built on Iexec" />
+  <meta property="og:description" content="Confidential Credit Scoring powered by iExec TEE." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+
+<body>
+  <script>
+    window.global = window;
+    window.process = window.process || { env: { NODE_ENV: 'development' }, browser: true };
+    window.module = window.module || { exports: {} };
+  </script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>
