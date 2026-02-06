@@ -12,4 +12,4 @@ After reading multiple blogs , i had fixed the issue later .
 
 Please provide clearer and more specific error messages, along with documentation that explains the exact cause of failures and how to fix them, instead of showing generic errors.
 
-Another issue is the difference between local testing and onchain execution. Mock protected data is useful for logic validation, but actual protected data execution needs to comply with the strict TEE determinism and runtime requirements, which can lead to unexpected failures onchain with limited error visibility. Better error messages and a CLI tool for creating and managing Protected Data would be a great improvement for development testing. 
+Another issue is the difference between local testing and onchain execution. Mock protected data is useful for logic validation, but actual protected data execution needs to comply with the strict TEE determinism and runtime requirements, which can lead to unexpected failures onchain with limited error visibility. Better error messages and a simpler CLI tool for creating and managing Protected Data would be a great improvement for development testing. 
