@@ -51,8 +51,8 @@ const LandingPage = () => {
         {/* Deferred Path: These components load as the user scrolls or after initial paint */}
         <Suspense fallback={<div className="h-96" />}>
           <Features />
-          <RealityBreak login={handleLogin} />
           <Testimonials />
+          <RealityBreak login={handleLogin} />
           <Footer />
         </Suspense>
       </main>
