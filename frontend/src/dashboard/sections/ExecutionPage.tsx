@@ -16,7 +16,7 @@ const ExecutionPage = () => {
     const { runId } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
-    const { protectData, grantAccess, processData, fetchResult, isInitialized } = useDataProtector();
+    const { protectData, grantAccess, processData, fetchResult, isInitialized, checkAndStake } = useDataProtector();
 
     const [status, setStatus] = useState<'initializing' | 'running' | 'completed' | 'failed'>('initializing');
     const [score, setScore] = useState<number | null>(null);
@@ -207,6 +207,17 @@ Task ID: ${timeline[3].explorerLink?.split('/').pop() || 'N/A'}
             let dealId = savedState.dealId;
 
             if (!taskId) {
+                updateTimeline('EXECUTE', 'pending', 'Checking RLC stake...');
+                try {
+                    const { staked, balance } = await checkAndStake();
+                    if (staked) {
+                        addLog(`Testnet RLC deposited. Stake: ${balance}`);
+                    }
+                } catch (e: any) {
+                    addLog(`Stake Warning: ${e.message}`);
+                    // Continue anyway, it might work if just enough
+                }
+
                 updateTimeline('EXECUTE', 'pending', 'Executing in Intel SGX...');
 
                 const result = await processData(protectedAddress, (status: any) => {

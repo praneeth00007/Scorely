@@ -27,12 +27,12 @@ const INITIAL_FORM: DetailedFinancialData = {
 
 // --- Example Values ---
 const EXAMPLE_VALUES: DetailedFinancialData = {
-  income: { annualSalaryUSD: 120000, otherIncomeUSD: 15000, employmentStabilityMonths: 60 },
-  liabilities: { totalOutstandingDebtUSD: 12000, monthlyDebtPaymentUSD: 500 },
-  creditUtilization: { totalCreditLimitUSD: 50000, currentUtilizedUSD: 2000 },
-  creditHistory: { oldestAccountMonths: 120, averageAccountAgeMonths: 72, latePayments: { '30D': 0, '60D': 0, '90D': 0 } },
-  creditMix: { creditCards: 5, installmentLoans: 1, mortgage: 1 },
-  newCredit: { hardInquiriesLast12Months: 0, newAccountsLast12Months: 0 }
+  income: { annualSalaryUSD: 45000, otherIncomeUSD: 2000, employmentStabilityMonths: 24 },
+  liabilities: { totalOutstandingDebtUSD: 8500, monthlyDebtPaymentUSD: 350 },
+  creditUtilization: { totalCreditLimitUSD: 10000, currentUtilizedUSD: 4200 }, // 42% utilization
+  creditHistory: { oldestAccountMonths: 48, averageAccountAgeMonths: 18, latePayments: { '30D': 1, '60D': 0, '90D': 0 } },
+  creditMix: { creditCards: 3, installmentLoans: 1, mortgage: 0 },
+  newCredit: { hardInquiriesLast12Months: 2, newAccountsLast12Months: 1 }
 };
 
 const STEPS = [

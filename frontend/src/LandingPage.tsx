@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from "react";
-import { useAccount } from "./hooks/useWeb3Compat";
+import { useAccount, useChainEnforcement } from "./hooks/useWeb3Compat";
 import { Noise } from "./landing/LandingUtils";
 import { Header } from "./landing/Header";
 import { Hero } from "./landing/HeroSection";
@@ -17,10 +17,20 @@ const Footer = lazy(() => import("./landing/SecondarySections").then(m => ({ def
 const LandingPage = () => {
   const { isConnected } = useAccount();
   const [{ }, connect] = useConnectWallet();
+  const { enforceArbitrumSepolia } = useChainEnforcement();
 
   const handleLogin = async () => {
     if (!isConnected) {
-      await connect();
+      try {
+        const wallets = await connect();
+        // Force chain switch immediately after connection
+        if (wallets && wallets.length > 0) {
+          console.log("Wallet connected, enforcing chain...");
+          await enforceArbitrumSepolia();
+        }
+      } catch (error) {
+        console.error("Connection failed:", error);
+      }
     }
   };
 

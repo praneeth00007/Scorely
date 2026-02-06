@@ -3,7 +3,7 @@ import { useAccount, useConnectorClient } from "./useWeb3Compat";
 import type { IExecDataProtectorCore } from "@iexec/dataprotector";
 import { BrowserProvider, JsonRpcSigner } from "ethers";
 import JSZip from "jszip";
-import { IExec } from "iexec";
+import { IExec, utils } from "iexec";
 
 // iExec app address for the computation engine Credit Scoring
 const RESOURCE_APP_ADDRESS = "0x48fa09C008C382Fe8E892742ab8e43117D797dcb";
@@ -60,6 +60,7 @@ export function useDataProtector() {
     useState<any>(null);
   const [dataProtectorCore, setDataProtectorCore] =
     useState<IExecDataProtectorCore | null>(null);
+  const [iexec, setIexec] = useState<IExec | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
   // Initialize the SDK
@@ -73,15 +74,55 @@ export function useDataProtector() {
       try {
         console.log(`[DataProtector] Initializing for chain: ${client.chain.id}`);
 
+        // Ensure we are on Arbitrum Sepolia (421614)
+        // while waiting for the auto-switch to Arbitrum Sepolia (421614).
+        if (client.chain.id !== 421614) {
+          console.log(`[DataProtector] Wrong chain detected (${client.chain.id}). Waiting for switch to 421614.`);
+          setIsInitialized(false);
+          return;
+        }
+
         const { IExecDataProtector } = await import("@iexec/dataprotector");
 
-        const dp = new IExecDataProtector(client.transport);
+        // --- GAS FIX PROXY FOR METAMASK ---
+        // This intercepts all transactions and ensures gas parameters are correctly set for Arbitrum Sepolia volatility.
+        const ethersProvider = new BrowserProvider(client.transport);
+        const gasFixProxy = new Proxy(client.transport, {
+          get(target, prop) {
+            if (prop === 'request') {
+              return async (args: any) => {
+                if (args.method === 'eth_sendTransaction') {
+                  const tx = args.params[0];
+                  try {
+                    const feeData = await ethersProvider.getFeeData();
+                    if (feeData.maxFeePerGas) {
+                      // Bump maxFeePerGas by 50% to handle base fee spikes
+                      tx.maxFeePerGas = "0x" + ((feeData.maxFeePerGas * 150n) / 100n).toString(16);
+                    }
+                    if (feeData.maxPriorityFeePerGas) {
+                      tx.maxPriorityFeePerGas = "0x" + feeData.maxPriorityFeePerGas.toString(16);
+                    }
+                    console.log('[GasFix] Optimized fees for MetaMask:', tx);
+                  } catch (e) {
+                    console.warn('[GasFix] Fee estimation failed, proceeding with wallet defaults:', e);
+                  }
+                }
+                return target.request(args);
+              };
+            }
+            return (target as any)[prop];
+          }
+        });
+
+        const dp = new IExecDataProtector(gasFixProxy);
+        const iexecInstance = new IExec({ ethProvider: gasFixProxy });
 
         setDataProtector(dp);
         setDataProtectorCore(dp.core);
+        setIexec(iexecInstance);
 
         setIsInitialized(true);
-        console.log("[DataProtector] Computation engine SDK Initialized");
+        console.log("[DataProtector] Computation engine SDK Initialized with Gas Fixes");
       } catch (error) {
         console.error("[DataProtector] Initialization failed:", error);
         setIsInitialized(false);
@@ -129,8 +170,8 @@ export function useDataProtector() {
       app: RESOURCE_APP_ADDRESS,
       workerpool: WORKERPOOL_ADDRESS,
       category: 3,
-      workerpoolMaxPrice: 1000000000,
-      appMaxPrice: 1000000000,
+      workerpoolMaxPrice: 100000000,
+      appMaxPrice: 100000000,
       path: "result.json",
       onStatusUpdate: (status) => {
         console.log(`[TEE] Status Update:`, status);
@@ -196,12 +237,40 @@ export function useDataProtector() {
     return scoreResult;
   }, [dataProtectorCore]);
 
+  // NEW: Check and Stake RLC if needed
+  const checkAndStake = useCallback(async (requiredNRLC: number = 200000000): Promise<{ staked: boolean, balance: string }> => {
+    if (!iexec) throw new Error("IExec SDK not initialized");
+    if (!address) throw new Error("Wallet not connected");
+
+    console.log('[Account] Checking RLC Stake...');
+    const balance = await iexec.account.checkBalance(address);
+    const stake = balance.stake; // is BN
+
+    console.log(`[Account] Current Stake: ${stake.toString()} nRLC. Required: ${requiredNRLC} nRLC`);
+
+    if (stake.lt(new utils.BN(requiredNRLC))) {
+      console.log('[Account] Stake insufficient. Initiating deposit...');
+
+      // Deposit 0.5 RLC = 500,000,000
+      const depositAmount = "500000000";
+
+      console.log(`[Account] Depositing ${depositAmount} nRLC...`);
+      const { amount, txHash } = await iexec.account.deposit(depositAmount);
+      console.log(`[Account] Deposited ${amount} nRLC. Tx: ${txHash}`);
+      return { staked: true, balance: balance.stake.toString() };
+    }
+
+    console.log('[Account] Stake sufficient.');
+    return { staked: false, balance: stake.toString() };
+  }, [iexec, address]);
+
   return {
     isInitialized,
     protectData,
     grantAccess,
     processData,
     fetchResult,
+    checkAndStake,
     dataProtectorCore,
   };
 }
