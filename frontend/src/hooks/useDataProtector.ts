@@ -94,17 +94,30 @@ export function useDataProtector() {
                 if (args.method === 'eth_sendTransaction') {
                   const tx = args.params[0];
                   try {
-                    const feeData = await ethersProvider.getFeeData();
-                    if (feeData.maxFeePerGas) {
-                      // Bump maxFeePerGas by 50% to handle base fee spikes
-                      tx.maxFeePerGas = "0x" + ((feeData.maxFeePerGas * 150n) / 100n).toString(16);
+                    const block = await ethersProvider.getBlock('latest');
+                    const baseFee = block?.baseFeePerGas;
+
+                    if (baseFee) {
+                      // Set maxFeePerGas to 2x base fee to be extremely safe against spikes
+                      // and provide a reasonable priority fee.
+                      const maxFee = (baseFee * 2n);
+                      const priorityFee = 100000000n; // 0.1 gwei
+
+                      tx.maxFeePerGas = "0x" + maxFee.toString(16);
+                      tx.maxPriorityFeePerGas = "0x" + priorityFee.toString(16);
+
+                      console.log('[GasFix] Optimization applied (EIP-1559):', {
+                        baseFee: baseFee.toString(),
+                        maxFee: maxFee.toString()
+                      });
+                    } else {
+                      // Fallback for non-EIP-1559 if needed
+                      const gasPrice = await ethersProvider.send('eth_gasPrice', []);
+                      tx.gasPrice = "0x" + ((BigInt(gasPrice) * 120n) / 100n).toString(16);
+                      console.log('[GasFix] Optimization applied (Legacy):', tx.gasPrice);
                     }
-                    if (feeData.maxPriorityFeePerGas) {
-                      tx.maxPriorityFeePerGas = "0x" + feeData.maxPriorityFeePerGas.toString(16);
-                    }
-                    console.log('[GasFix] Optimized fees for MetaMask:', tx);
                   } catch (e) {
-                    console.warn('[GasFix] Fee estimation failed, proceeding with wallet defaults:', e);
+                    console.warn('[GasFix] Fee optimization skipped:', e);
                   }
                 }
                 return target.request(args);
