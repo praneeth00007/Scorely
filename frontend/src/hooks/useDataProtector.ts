@@ -98,16 +98,17 @@ export function useDataProtector() {
                     const baseFee = block?.baseFeePerGas;
 
                     if (baseFee) {
-                      // Set maxFeePerGas to 2x base fee to be extremely safe against spikes
-                      // and provide a reasonable priority fee.
-                      const maxFee = (baseFee * 2n);
+                      // Set priority fee first
                       const priorityFee = 100000000n; // 0.1 gwei
+                      // Set maxFeePerGas to 1.5x base fee + priority fee to be safe
+                      const maxFee = (baseFee * 15n / 10n) + priorityFee;
 
                       tx.maxFeePerGas = "0x" + maxFee.toString(16);
                       tx.maxPriorityFeePerGas = "0x" + priorityFee.toString(16);
 
                       console.log('[GasFix] Optimization applied (EIP-1559):', {
                         baseFee: baseFee.toString(),
+                        priorityFee: priorityFee.toString(),
                         maxFee: maxFee.toString()
                       });
                     } else {
